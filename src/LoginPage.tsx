@@ -1,17 +1,19 @@
 import React, { useState, FormEvent } from 'react';
 
-interface LoginPageProps {}
+type MessageType = 'success' | 'error' | '';
 
-const LoginPage: React.FC<LoginPageProps> = () => {
+const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
+  const [messageType, setMessageType] = useState<MessageType>('');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!email || !password) {
       setMessage('이메일과 비밀번호를 모두 입력하세요.');
+      setMessageType('error');
       return;
     }
 
@@ -19,6 +21,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMessage('올바른 이메일 형식이 아닙니다.');
+      setMessageType('error');
       return;
     }
 
@@ -31,14 +34,17 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 
       if (response.ok) {
         setMessage('로그인 성공!');
+        setMessageType('success');
         // 추가 작업 (예: 토큰 저장, 페이지 이동 등)
         // const data = await response.json();
         // localStorage.setItem('token', data.token);
       } else {
         setMessage('로그인 실패. 아이디와 비밀번호를 확인하세요.');
+        setMessageType('error');
       }
     } catch (error) {
       setMessage('네트워크 오류가 발생했습니다.');
+      setMessageType('error');
     }
   };
 
@@ -105,7 +111,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
         <p style={{ 
           marginTop: '15px', 
           textAlign: 'center',
-          color: message.includes('성공') ? 'green' : 'red'
+          color: messageType === 'success' ? 'green' : 'red'
         }}>
           {message}
         </p>
