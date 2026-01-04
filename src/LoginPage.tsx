@@ -2,6 +2,8 @@ import React, { useState, FormEvent } from 'react';
 
 type MessageType = 'success' | 'error' | '';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -18,8 +20,7 @@ const LoginPage: React.FC = () => {
     }
 
     // 이메일 형식 검증
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!EMAIL_REGEX.test(email)) {
       setMessage('올바른 이메일 형식이 아닙니다.');
       setMessageType('error');
       return;
